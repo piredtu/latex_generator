@@ -96,6 +96,9 @@ def formi(input_string, dico):
     #print string, out
     #return out
 
+def exep(x):
+    print 'EXE', x
+    commands.getoutput(x)
 
 def tostr(input_string):
     """ Change a list of strings into a multiline string """
@@ -269,8 +272,15 @@ class report(latex_element):
         self.save()
         for i in range(3):
             # commands.getoutput('xterm -e pdflatex ' + self.tex_filename)
-            commands.getoutput('pdflatex ' + self.tex_filename)
+            exep('pdflatex ' + self.tex_filename)
             #commands.getoutput('open '+self.pdf_filename)
+
+    def clean(self):
+        for ext in ['toc', 'snm', 'out', 'nav', 'log', 'aux']:
+            exep('rm ' + ' *.' + ext)
+
+    def open_pdf(self):
+        exep('open '+ self.pdf_filename)
     
 
 def cfig(filename, width='\\textwidth'):
