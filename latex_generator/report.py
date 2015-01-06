@@ -158,9 +158,9 @@ class latex_element(object):
         else:
             self.doc_main.append(tostr(string))
         
-    def addl(self, string):
+    def addl(self, string,**kwargs):
         """ Add a line """
-        self.add(string)
+        self.add(string,**kwargs)
         self.endl()
         
     def endl(self):
@@ -231,10 +231,6 @@ class latex_element(object):
             self.label(label)
         self.end('equation')
 
-    def fig(self, filename, width='\\textwidth'):
-        self.addl('\\begin{center}')
-        self.addl('\\includegraphics[width='+width+']{'+filename+'}')
-        self.addl('\\end{center}')
             
 
 class report(latex_element):
@@ -255,7 +251,7 @@ class report(latex_element):
     rep.addl(r'Look at Eq.\ref{eq:crazy_eq} and Fig.\ref{fig:fabfig} if you are not convinced.')
     """
 
-    template_filename = 'template/template_simple_article.tex'
+    template_filename = 'template/template_mini_article.tex'
 
     template = ""
 
@@ -288,7 +284,6 @@ def cfig(filename, width='\\textwidth'):
 
 def fig(filename, width='\\textwidth'):
     return '\\includegraphics[width='+width+']{'+filename+'}'
-
 
 
 class table(latex_element):
