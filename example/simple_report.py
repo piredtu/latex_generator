@@ -1,51 +1,14 @@
-from latex_generator.slides import *
+from latex_generator.report import report
 
-s = slides(
-  tex_filename= 'slide_show.tex',
-  short_title = 'sorter title',
-  title = "The title",
-  date = 'the date',
-  author= "Your list of names",
-  short_author = "Shorter name",
-  university = "university",
-  institute = "Institute",
-)
-
-
-### Create the outline of the presentation using the sections and subsections
-s.f('Table of Contents','\\tableofcontents')
-
-s.section('Section name', 'Shorter name')
-s.subsection('Introduction')
-s.f('Overview of DTU\'s Wind Farm Flow Models',
-    ('hello'  # A paranthesis without a comma creates a string in python
-     '\\\\' # This is a end of line sign
-     'This is now a list\n'
-     """
-     * hello
-     * what
-     * is going on
-     """ # Tripple quote allows to have a comment over several lines, including end-of-line characters
-         # some markdown stuff is automatically detected in the text and translated into latex using a custom function
-     )
-    )
-s.section('Section name 2', 'Shorter name 2')
-
-s.f('Title',
-("""
-This is the body of the text \\\\
-New line
-
-Another new line
-
-* Some itememized
-* Text
-
-"""
-# add some text
-#+ cfig('/Users/pire/git/latex_generator/example/template/AAUlogo-eps-converted-to.pdf', '3cm')
-))
-
-s.compile()
-s.clean()
-s.open_pdf()
+rep = report()
+rep.section('Introduction')
+rep.addl('hello.')
+rep.addl("EllipSys has run within {minutes} minutes over {ncpu} CPUs using the server called {srvname}.",
+        minutes=10.0, srvname='servername', ncpu=72)
+#rep.fig('surf01.grd.png', caption='This is fabulous!', label='fig:fabfig')
+rep.eq(r'x^2 = \int_a^b \ln{x} d x', label='eq:crazy_eq')
+rep.subsection('My section')
+rep.addl(r'Look at Eq.\ref{eq:crazy_eq} and Fig.\ref{fig:fabfig} if you are not convinced.')
+rep.compile()
+rep.clean()
+rep.open_pdf()
