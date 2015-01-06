@@ -1,9 +1,11 @@
 from distutils.core import setup
+from setuptools import find_packages
 
 setup(
     name='latex_generator',
     version='0.1',
-    packages=[''],
+    packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+    install_requires = ['pypandoc'],
     url='https://github.com/piredtu/latex_generator',
     license='AGPL v3.0',
     author='Pierre-Elouan Rethore',
