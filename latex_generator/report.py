@@ -43,7 +43,7 @@ def md2tex(instr):
                     outstr += sp[:-1] + tag_dic['begin'+sp[-1]] + '\n'  
                     outstr += sp[:-1] + '  \\item ' + l[len(sp):] + '\n'
                 if sp[-1] == '+':
-                    outstr += sp[:-1] + tag_dic['begin'+sp[-1]] + '{' + l[len(sp):] + '}\n'                    
+                    outstr += sp[:-1] + tag_dic['begin'+sp[-1]] + '{' + l[len(sp):] + '}\n'
         else:
             dk = dic.keys()
             lens = map(len, dk)
@@ -54,8 +54,8 @@ def md2tex(instr):
                 if len(i) > len(re.findall('^\s*',l)[0]):
                     outstr += i[:-1] + tag_dic['end'+i[-1]] + '\n'
                     dic.pop(i)
-            outstr += l + '\n'
-    return outstr
+            outstr += l +'\n'
+    return outstr.replace('\n\n','\n')
 
 def formi(input_string, dico):
     """
@@ -120,7 +120,7 @@ class latex_element(object):
     template = "#doc_main#"
     doc_main = []
 
-    def __init__(self, doc_main= [], **kwargs):
+    def __init__(self, doc_main=[], **kwargs):
         #print 'init', self.__class__.__name__
         ### Fill up the frame with the parameters
         if not isinstance(doc_main, list):
@@ -158,9 +158,9 @@ class latex_element(object):
         else:
             self.doc_main.append(tostr(string))
         
-    def addl(self, string,**kwargs):
+    def addl(self, string, **kwargs):
         """ Add a line """
-        self.add(string,**kwargs)
+        self.add(string, **kwargs)
         self.endl()
         
     def endl(self):
@@ -264,11 +264,15 @@ class report(latex_element):
     def save(self):
         write_tostr(self.tex_filename, tostr(self))
             
-    def compile(self):
+    def compile(self, n=3, xterm=False):
         self.save()
-        for i in range(3):
+        for i in range(n):
             # commands.getoutput('xterm -e pdflatex ' + self.tex_filename)
-            exep('pdflatex ' + self.tex_filename)
+            if xterm:
+                exep('xterm -e pdflatex ' + self.tex_filename)
+            else:
+                exep('pdflatex ' + self.tex_filename)
+            #exep('pdflatex ' + self.tex_filename)
             #commands.getoutput('open '+self.pdf_filename)
 
     def clean(self):
@@ -354,3 +358,21 @@ eq = lambda string: env_latex('equation', string)
 centered = lambda string: env_latex('center', string)
 ceq = lambda string: centered(eq(string))
           
+# def pdf(filename, pagen):
+#     if isinstance(pagen, int):
+#         pagen = str(pagen)
+#     return '\\includepdf[pages=%s]{%s}'%(pagen, filename)
+
+
+hspace = lambda x: '\\hspace{%s}\n'%x
+vspace = lambda x: '\\vspace{%s}\n'%x
+bold = lambda st: "\\textbf{%s}" % st
+italic = lambda st: "\\textit{%s}" % st
+color = lambda col, st: "\\textcolor{%s}{%s}" % (col, st)
+
+
+def href(url, st=None, col='blue'):
+    if st is None:
+        return "\\href{%s}{%s}" % (url, color(col, url))
+    else:
+        return "\\href{%s}{%s}" % (url, color(col, st))
